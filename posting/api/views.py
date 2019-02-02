@@ -10,10 +10,13 @@ class BlogPostRudView(generics.RetrieveUpdateDestroyAPIView):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
 
+    def get_serializer_context(self, *args, **kwargs):
+        return {'request': self.request}
+
 class BlogPostView(mixins.CreateModelMixin, generics.ListAPIView):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         qs = BlogPost.objects.all()
@@ -26,6 +29,12 @@ class BlogPostView(mixins.CreateModelMixin, generics.ListAPIView):
         return qs
 
     def post(self, request, *args, **kwargs):
-        self.create(request, *args, **kwargs)
+        return self.create(request, *args, **kwargs)
+
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
+
+    def get_serializer_context(self, *args, **kwargs):
+        return {'request': self.request}
 
 

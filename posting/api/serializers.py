@@ -5,9 +5,15 @@ from posting.models import BlogPost
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
+    uri = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = BlogPost
-        fields = ['pk', 'title', 'content', 'timestamp']
+        fields = ['pk', 'title', 'content', 'timestamp', 'uri']
+
+    def get_uri(self, obj):
+        request = self.context.get('request')
+        return obj.get_api_url(request=request)
 
     def validate_title(self, value):
         qs = BlogPost.objects.filter(title__iexact=value)
