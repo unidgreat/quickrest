@@ -3,6 +3,7 @@ from rest_framework import generics, mixins
 
 from posting.models import BlogPost
 from .serializers import BlogPostSerializer
+from .permissions import IsOwnerOrReadOnly
 
 class BlogPostRudView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
@@ -12,6 +13,7 @@ class BlogPostRudView(generics.RetrieveUpdateDestroyAPIView):
 class BlogPostView(mixins.CreateModelMixin, generics.ListAPIView):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         qs = BlogPost.objects.all()
