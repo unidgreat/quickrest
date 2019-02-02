@@ -7,5 +7,5 @@ class BlogPost(models.Model):
     content = models.TextField(max_length=120, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str_(self):
-        return self.user.username
+    def __str__(self):
+        return str(self.title)
